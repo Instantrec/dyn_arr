@@ -65,6 +65,8 @@ int add(dynArr *arr, int value)
         // retrieving values
         for (int i = 0; i < arr->size; ++i)
             arr->el[i] = tmpArr[i];
+
+        free(tmpArr);
     }
 
     // adding a new value and updating the size
