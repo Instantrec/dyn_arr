@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 
 #define ARRSIZE(x) sizeof(x) / sizeof((x)[0])
 
@@ -20,7 +21,7 @@ typedef struct {
 void printInfo(dynArr arr)
 {
     for (int i = 0; i < arr.size; ++i)
-    { 
+    {
         printf("%d ", arr.el[i]);
     }
     printf(". Size = %d Fullsize = %d\n", arr.size, arr.fullsize);
@@ -59,7 +60,8 @@ int add(dynArr *arr, int value)
         for (int i = 0; i < arr->size; ++i)
             tmpArr[i] = arr->el[i];
 
-        arr->el = calloc(arr->size * 2, sizeof(int));
+        //arr->el = calloc(arr->size * 2, sizeof(int)); another wat to reallocate but the realloc() is considered to be used
+        arr->el = (int *)realloc(arr->el, arr->size * 2);
         arr->fullsize = arr->size * 2;
 
         // retrieving values
@@ -99,6 +101,28 @@ int set(dynArr *arr, int el, uint32_t index)
     return SUCCESS;
 }
 
+int insert(dynArr *arr, int *vals, size_t amount, uint32_t pos)
+{
+    if (amount < 1)
+    {
+        perror("Incorrect amount of values\n");
+        return FAILURE;
+    }
+
+    if (amount > arr->fullsize - arr->size) // reallocation is required
+    {
+        int requiredExtension = (amount - (arr->fullsize - arr->size));
+        arr->el = realloc(arr->el, requiredExtension * sizeof(int));
+        arr->fullsize += requiredExtension;
+    }
+
+    memmove(arr->el + pos + amount, arr->el + pos, (arr->size - pos) * sizeof(int));
+    arr->size += amount;
+    memmove(arr->el + pos, vals, amount * sizeof(int));
+
+    return SUCCESS;
+}
+
 void delete(dynArr *arr)
 {
     free(arr->el);
@@ -116,7 +140,14 @@ int main()
     int vals[] = {1, 2, 3};
     init(arr, vals, ARRSIZE(vals));
 
-    add(arr, 4);
+    int insertVals[] = {10, 20, 30};
+    insert(arr, insertVals, ARRSIZE(insertVals), 0);
+    printInfo(*arr);
+
+    insert(arr, insertVals, ARRSIZE(insertVals), 0);
+    printInfo(*arr);
+
+    /*add(arr, 4);
     printInfo(*arr);
 
     addValues(arr, vals, ARRSIZE(vals));
@@ -124,6 +155,10 @@ int main()
 
     set(arr, 228, 3);
     printInfo(*arr);
+
+    int insertVal = 10;
+    insert(arr, &insertVal, 1, 0);
+    printInfo(*arr);*/
 
     delete(arr);
 
