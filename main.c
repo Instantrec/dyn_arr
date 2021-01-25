@@ -4,10 +4,15 @@
 #include <string.h>
 
 #include "dyn_array.h"
+#include "hash_table.h"
 
 int main()
 {
-    printf("Dynamic Array demo\n");
+    printf("Hash table demo\n");
+
+    ht_hash_table* ht = ht_new();
+    ht_del_hash_table(ht);
+    /*printf("Dynamic Array demo\n");
 
     dynArr *arr;
     arr = malloc(sizeof(dynArr));
@@ -20,7 +25,7 @@ int main()
     printInfo(*arr);
 
     insert(arr, insertVals, ARRSIZE(insertVals), 0);
-    printInfo(*arr);
+    printInfo(*arr);*/
 
     /*add(arr, 4);
     printInfo(*arr);
@@ -35,7 +40,7 @@ int main()
     insert(arr, &insertVal, 1, 0);
     printInfo(*arr);*/
 
-    deleteArr(arr);
+    //deleteArr(arr);
 
     return EXIT_SUCCESS;
 }

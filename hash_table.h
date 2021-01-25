@@ -4,12 +4,15 @@
 typedef struct {
     char *key;
     char *value;
-} ht_record;
+} ht_item;
 
 typedef struct {
     int size;
     int count;
-    ht_record **records;
-} hash_table;
+    ht_item **items;
+} ht_hash_table;
+
+ht_hash_table *ht_new(void);
+void ht_del_hash_table(ht_hash_table *ht);
 
 #endif
